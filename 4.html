@@ -31,8 +31,8 @@
     </svg>
      -->
 
-    <svg id="canvasBackground" width="1024" height="480" x="1024" y="480" overflow="visible"
-         style="pointer-events:none">
+    <!-- style="pointer-events:none" -->
+    <svg id="canvasBackground" width="1024" height="480" x="1024" y="480" overflow="visible">
         <defs>
             <filter id="canvashadow" filterUnits="objectBoundingBox">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"></feGaussianBlur>
@@ -71,30 +71,17 @@
             </pattern>
         </defs>
 
-        <svg id="canvasGrid" width="100%" height="100%" x="0" y="0" overflow="visible" viewBox="0 0 1024 480"
-             display="normal">
-            <!--
-            <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern1x1)"
-                  opacity="1" style="pointer-events: none; display:visible;"></rect>
-            <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern5x5)"
-                  opacity="1" style="pointer-events: none; display:visible;"></rect>
-                  -->
+        <g class="grid">
             <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern15)"
                   opacity="1" style="pointer-events: none; display:visible;"></rect>
             <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern150)"
                   opacity="1" style="pointer-events: none; display:visible;"></rect>
-        </svg>
+        </g>
 
-        <!-- svg content -->
-        <!--
-        <svg id="svgcontent" width="960" height="720" x="0" y="0" overflow="visible"
-             xmlns="http://www.w3.org/2000/svg" xmlns:se="http://svg-edit.googlecode.com"
-             xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 480">
-         -->
-        <svg id="svgcontent" width="100%" height="100%" x="0" y="0" overflow="visible" viewBox="0 0 1024 480"
-                 display="normal">
+        <g>
             <circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>
-        </svg>
+        </g>
+
     </svg>
 </div>
 
@@ -102,27 +89,33 @@
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-    $(function(){
+    $(function () {
 
-        $("#svgcontent").click(function(){
-            alert("svgcontent");
+        $("#canvasBackground").click(function (evt) {
+            //alert("canvasBackground");
+
+            var e = evt.target;
+            var dim = e.getBoundingClientRect();
+            var x = evt.clientX - dim.left;
+            var y = evt.clientY - dim.top
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            var myCircle = document.createElementNS(svgNS,"circle"); //to create a circle, for rectangle use rectangle
+            myCircle.setAttributeNS(null,"id","mycircle");
+            myCircle.setAttributeNS(null,"cx",x);
+            myCircle.setAttributeNS(null,"cy",y);
+            myCircle.setAttributeNS(null,"r",7);
+            myCircle.setAttributeNS(null,"fill","black");
+            myCircle.setAttributeNS(null,"stroke","none");
+
+            document.getElementById("canvasBackground").appendChild(myCircle);
+
         });
 
-        $("#canvasGrid").click(function(){
-            alert("canvasGrid");
-        });
-
-        $("#canvasBackground").click(function(){
-            alert("canvasBackground");
-        });
-
-        $("#circle1").click(function(){
+        $("#circle1").click(function () {
             alert("crcl");
         });
 
-        $("#fakeBtn").click(function(){
-            alert("fake");
-        });
 
     });
 </script>
