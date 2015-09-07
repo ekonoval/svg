@@ -8,6 +8,10 @@
 <style type="text/css">
     #canvasBackground {
         border: 1px solid black;
+        background: transparent url("img/HNATOB.png") no-repeat;
+        background: transparent url("img/HNATOB-clear.png") no-repeat;
+        width: 1197px;
+        height: 618px;
     }
 
     #canvasGrid {
@@ -78,18 +82,32 @@
                   opacity="1" style="pointer-events: none; display:visible;"></rect>
         </g>
 
-        <g>
-            <circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>
+        <g id="circlesHolder">
+            <!--<circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>-->
         </g>
 
     </svg>
 </div>
 
-<button id="fakeBtn">fake</button>
+<button id="changeBgBtn">change background</button>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
     $(function () {
+
+        $("#changeBgBtn").click(function(){
+            var currentBg = $("#canvasBackground").css('background-image');
+            var newBg = '';
+console.log(currentBg);
+            
+            if (currentBg.includes('img/HNATOB.png')) {
+                newBg = 'url("img/HNATOB-clear.png")';
+            } else {
+                newBg = 'url("img/HNATOB.png")';
+            }
+
+            $("#canvasBackground").css('background-image', newBg);
+        });
 
         $("#canvasBackground").click(function (evt) {
             //alert("canvasBackground");
@@ -100,23 +118,24 @@
             var y = evt.clientY - dim.top;
 
             console.log(x, y);
-            x = correctCoordForCell(x);
-            y = correctCoordForCell(y);
+
+            if (evt.ctrlKey) {
+                x = correctCoordForCell(x);
+                y = correctCoordForCell(y);
+            }
 
 
             var svgNS = "http://www.w3.org/2000/svg";
-            var myCircle = document.createElementNS(svgNS,"circle"); //to create a circle, for rectangle use rectangle
-            myCircle.setAttributeNS(null,"id","mycircle");
-            myCircle.setAttributeNS(null,"cx",x);
-            myCircle.setAttributeNS(null,"cy",y);
-            myCircle.setAttributeNS(null,"r", 6.5);
-            myCircle.setAttributeNS(null,"fill","black");
-            myCircle.setAttributeNS(null,"stroke","none");
+            var myCircle = document.createElementNS(svgNS, "circle"); //to create a circle, for rectangle use rectangle
+            myCircle.setAttributeNS(null, "id", "mycircle");
+            myCircle.setAttributeNS(null, "cx", x);
+            myCircle.setAttributeNS(null, "cy", y);
+            myCircle.setAttributeNS(null, "r", 6.5);
+            myCircle.setAttributeNS(null, "fill", "black");
+            myCircle.setAttributeNS(null, "stroke", "none");
 
-            document.getElementById("canvasBackground").appendChild(myCircle);
-
-
-
+//            document.getElementById("canvasBackground").appendChild(myCircle);
+            document.getElementById("circlesHolder").appendChild(myCircle);
         });
 
         $("#circle1").click(function () {
@@ -126,15 +145,13 @@
 
     });
 
-    function correctCoordForCell(coord)
-    {
+    function correctCoordForCell(coord) {
         var residue = coord % 15;
         //var rounded = (x - residue) / 15;
         var rounded = coord - residue + 6.5 + 1;
         return rounded;
     }
 </script>
-
 
 </body>
 </html>
