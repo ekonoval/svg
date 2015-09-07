@@ -97,18 +97,25 @@
             var e = evt.target;
             var dim = e.getBoundingClientRect();
             var x = evt.clientX - dim.left;
-            var y = evt.clientY - dim.top
+            var y = evt.clientY - dim.top;
+
+            console.log(x, y);
+            x = correctCoordForCell(x);
+            y = correctCoordForCell(y);
+
 
             var svgNS = "http://www.w3.org/2000/svg";
             var myCircle = document.createElementNS(svgNS,"circle"); //to create a circle, for rectangle use rectangle
             myCircle.setAttributeNS(null,"id","mycircle");
             myCircle.setAttributeNS(null,"cx",x);
             myCircle.setAttributeNS(null,"cy",y);
-            myCircle.setAttributeNS(null,"r",7);
+            myCircle.setAttributeNS(null,"r", 6.5);
             myCircle.setAttributeNS(null,"fill","black");
             myCircle.setAttributeNS(null,"stroke","none");
 
             document.getElementById("canvasBackground").appendChild(myCircle);
+
+
 
         });
 
@@ -118,6 +125,14 @@
 
 
     });
+
+    function correctCoordForCell(coord)
+    {
+        var residue = coord % 15;
+        //var rounded = (x - residue) / 15;
+        var rounded = coord - residue + 6.5 + 1;
+        return rounded;
+    }
 </script>
 
 
