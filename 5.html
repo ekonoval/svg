@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<style type="text/css">
+    #canvasBackground {
+        border: 1px solid black;
+        background: transparent url("img/HNATOB.png") no-repeat;
+        background: transparent url("img/HNATOB-clear.png") no-repeat;
+        width: 1197px;
+        height: 618px;
+    }
+
+    #canvasGrid {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    #svgcontent {
+        position: relative;
+        top: 0;
+        left: 0;
+        background-color: red;
+    }
+</style>
+
+<div style="background-color: #F7EFED; width: 1250px; height: 630px;">
+    <!--
+    <svg width="1200" height="620" style="border: 1px solid black; background: transparent url('http://mticket.com.ua/images/HNATOB.png') no-repeat;">
+        <circle r="50" cx="100" cy="100" onclick="alert('circle');" style="cursor: pointer;"/>
+    </svg>
+     -->
+
+    <!-- style="pointer-events:none" -->
+    <svg id="canvasBackground" width="1024" height="480" x="1024" y="480" overflow="visible">
+        <defs>
+            <filter id="canvashadow" filterUnits="objectBoundingBox">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"></feGaussianBlur>
+                <feOffset in="blur" dx="5" dy="5" result="offsetBlur"></feOffset>
+                <feMerge>
+                    <feMergeNode in="offsetBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+            <!--
+            <pattern id="gridpattern1x1" patternUnits="userSpaceOnUse" x="-0.025" y="-0.025" width="1" height="1">
+                <line fill="none" stroke-width="0.05" x1="0" y1="0" x2="1" y2="0" stroke="#CCC"></line>
+                <line fill="none" stroke-width="0.05" x1="0" y1="0" x2="0" y2="1" stroke="#CCC"></line>
+            </pattern>
+            <pattern id="gridpattern5x5" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="5" height="5">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="5" y2="0" stroke="#BBB"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="5" stroke="#BBB"></line>
+            </pattern>
+             -->
+            <pattern id="gridpattern10x10" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="10" height="10">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="10" y2="0" stroke="#AAA"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="10" stroke="#AAA"></line>
+            </pattern>
+            <pattern id="gridpattern100x100" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="100" height="100">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="100" y2="0" stroke="#888"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="100" stroke="#888"></line>
+            </pattern>
+
+            <pattern id="gridpattern15" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="15" height="15">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="15" y2="0" stroke="#AAA"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="15" stroke="#AAA"></line>
+            </pattern>
+            <pattern id="gridpattern150" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="150" height="150">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="150" y2="0" stroke="#888"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="150" stroke="#888"></line>
+            </pattern>
+        </defs>
+
+        <g class="grid">
+            <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern15)"
+                  opacity="1" style="pointer-events: none; display:visible;"></rect>
+            <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern150)"
+                  opacity="1" style="pointer-events: none; display:visible;"></rect>
+        </g>
+
+        <g id="circlesHolder">
+            <!--<circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>-->
+        </g>
+
+    </svg>
+</div>
+
+<button id="changeBgBtn">change background</button>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#changeBgBtn").click(function(){
+            var currentBg = $("#canvasBackground").css('background-image');
+            var newBg = '';
+console.log(currentBg);
+            
+            if (currentBg.includes('img/HNATOB.png')) {
+                newBg = 'url("img/HNATOB-clear.png")';
+            } else {
+                newBg = 'url("img/HNATOB.png")';
+            }
+
+            $("#canvasBackground").css('background-image', newBg);
+        });
+
+        $("#canvasBackground").click(function (evt) {
+            //alert("canvasBackground");
+
+            var e = evt.target;
+            var dim = e.getBoundingClientRect();
+            var x = evt.clientX - dim.left;
+            var y = evt.clientY - dim.top;
+
+            console.log(x, y);
+
+            if (evt.ctrlKey) {
+                x = correctCoordForCell(x);
+                y = correctCoordForCell(y);
+            }
+
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            var myCircle = document.createElementNS(svgNS, "circle"); //to create a circle, for rectangle use rectangle
+            myCircle.setAttributeNS(null, "id", "mycircle");
+            myCircle.setAttributeNS(null, "cx", x);
+            myCircle.setAttributeNS(null, "cy", y);
+            myCircle.setAttributeNS(null, "r", 6.5);
+            myCircle.setAttributeNS(null, "fill", "black");
+            myCircle.setAttributeNS(null, "stroke", "none");
+
+//            document.getElementById("canvasBackground").appendChild(myCircle);
+            document.getElementById("circlesHolder").appendChild(myCircle);
+        });
+
+        $("#circle1").click(function () {
+            alert("crcl");
+        });
+
+
+    });
+
+    function correctCoordForCell(coord) {
+        var residue = coord % 15;
+        //var rounded = (x - residue) / 15;
+        var rounded = coord - residue + 6.5 + 1;
+        return rounded;
+    }
+</script>
+
+</body>
+</html>
