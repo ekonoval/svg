@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript"
+            src="https://rawgit.com/DanielHoffmann/jquery-svg-pan-zoom/master/compiled/jquery.svg.pan.zoom.js"></script>
+</head>
+<body>
+<style type="text/css">
+    #canvasBackground {
+        border: 1px solid black;
+        /*background: transparent url("img/HNATOB.png") no-repeat;*/
+        /*background: transparent url("img/HNATOB-clear.png") no-repeat;*/
+        width: 1197px;
+        height: 618px;
+    }
+
+    #canvasGrid {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    #svgcontent {
+        position: relative;
+        top: 0;
+        left: 0;
+        background-color: red;
+    }
+</style>
+
+<div id="example1" class="controls">
+    <div class="controls-pan">
+        <p><i class="btn btn-success fa fa-arrow-up"></i></p>
+        <p>
+            <i class="btn btn-success fa fa-arrow-left"></i>
+            <i class="btn btn-success fa fa-arrow-right"></i>
+        </p>
+        <p><i class="btn btn-success fa fa-arrow-down"></i></p>
+    </div>
+    <div class="controls-zoom">
+        <p><i class="btn btn-success fa fa-refresh"></i></p>
+        <p><i class="btn btn-success fa fa-plus"></i> </p>
+        <p><i class="btn btn-success fa fa-minus"></i></p>
+    </div>
+</div>
+
+<div style="background-color: #F7EFED; width: 1250px; height: 630px;">
+
+    <svg id="svg1" width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg"  version="1.1"
+         <!--style="border: 1px solid black; background: transparent url('http://mticket.com.ua/images/HNATOB.png') no-repeat;"-->
+        >
+
+        <image x="0" y="0" width="1200" height="620"
+             xlink:href="img/HNATOB-clear.png" />
+
+        <circle r="50" cx="100" cy="100" onclick="alert('circle');" style="cursor: pointer;"/>
+    </svg>
+
+</div>
+
+<button id="changeBgBtn">change background</button>
+
+<script type="text/javascript">
+    var example1, example2; //globals so we can manipulate them in the debugger
+
+    $(function () {
+//        var examples = $("svg").svgPanZoom();
+
+        var callback = function (example) {
+            return function (event) {
+                if ($(event.target).hasClass("fa-arrow-up"))
+                    example.panUp()
+                if ($(event.target).hasClass("fa-arrow-down"))
+                    example.panDown()
+                if ($(event.target).hasClass("fa-arrow-left"))
+                    example.panLeft()
+                if ($(event.target).hasClass("fa-arrow-right"))
+                    example.panRight()
+                if ($(event.target).hasClass("fa-plus"))
+                    example.zoomIn()
+                if ($(event.target).hasClass("fa-minus"))
+                    example.zoomOut()
+                if ($(event.target).hasClass("fa-refresh"))
+                    example.reset()
+            }
+        };
+
+//        example1 = examples[0];
+//        example2 = examples[1];
+        example1 = $("#svg1").svgPanZoom({controlIconsEnabled: true});
+
+        $("div#example1 i").click(callback(example1));
+//        $("div#example2 i").click(callback(example2));
+    });
+</script>
+
+</body>
+</html>
