@@ -54,14 +54,33 @@
 
 <div style="background-color: #F7EFED; width: 1250px; height: 630px;">
 
-    <svg id="svg1" width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg"  version="1.1"
-         <!--style="border: 1px solid black; background: transparent url('http://mticket.com.ua/images/HNATOB.png') no-repeat;"-->
-        >
+    <svg id="svg1" width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg"  version="1.1" >
+        <defs>
+            <pattern id="gridpattern15" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="15" height="15">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="15" y2="0" stroke="#AAA"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="15" stroke="#AAA"></line>
+            </pattern>
+            <pattern id="gridpattern150" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="150" height="150">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="150" y2="0" stroke="#888"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="150" stroke="#888"></line>
+            </pattern>
+        </defs>
 
         <image x="0" y="0" width="1200" height="620"
              xlink:href="img/HNATOB-clear.png" />
 
-        <circle r="50" cx="100" cy="100" onclick="alert('circle');" style="cursor: pointer;"/>
+        <g class="grid">
+            <rect width="1000%" height="1000%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern15)"
+                  opacity="1" style="pointer-events: none; display:visible;"></rect>
+            <rect width="1000%" height="1000%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern150)"
+                  opacity="1" style="pointer-events: none; display:visible;"></rect>
+        </g>
+
+        <g id="circlesHolder">
+            <!--<circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>-->
+        </g>
+
+        <circle r="50" cx="100" cy="100"  style="cursor: pointer;"/>
     </svg>
 
 </div>
@@ -93,13 +112,72 @@
             }
         };
 
-//        example1 = examples[0];
-//        example2 = examples[1];
         example1 = $("#svg1").svgPanZoom({controlIconsEnabled: true});
 
         $("div#example1 i").click(callback(example1));
 //        $("div#example2 i").click(callback(example2));
     });
+
+    $(function () {
+
+        $("#changeBgBtn").click(function(){
+            var currentBg = $("#canvasBackground").css('background-image');
+            var newBg = '';
+
+
+            if (currentBg.includes('img/HNATOB.png')) {
+                newBg = 'url("img/HNATOB-clear.png")';
+            } else {
+                newBg = 'url("img/HNATOB.png")';
+            }
+
+            $("#canvasBackground").css('background-image', newBg);
+        });
+
+        $("#svg1").click(function (evt) {
+            //alert("canvasBackground");
+
+            var e = evt.target;
+            var dim = e.getBoundingClientRect();
+            var x = evt.clientX - dim.left;
+            var y = evt.clientY - dim.top;
+
+            console.log(x, y);
+
+            if (evt.ctrlKey) {
+                x = correctCoordForCell(x);
+                y = correctCoordForCell(y);
+            }
+
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            var myCircle = document.createElementNS(svgNS, "circle"); //to create a circle, for rectangle use rectangle
+            myCircle.setAttributeNS(null, "id", "mycircle");
+            myCircle.setAttributeNS(null, "cx", x);
+            myCircle.setAttributeNS(null, "cy", y);
+            myCircle.setAttributeNS(null, "r", 6.5);
+            myCircle.setAttributeNS(null, "fill", "black");
+            myCircle.setAttributeNS(null, "stroke", "none");
+
+//            document.getElementById("canvasBackground").appendChild(myCircle);
+            document.getElementById("circlesHolder").appendChild(myCircle);
+        });
+
+        $("circle").click(function (e) {
+            e.stopPropagation();
+            alert("crcl");
+        });
+
+
+    });
+
+    function correctCoordForCell(coord) {
+        var residue = coord % 15;
+        //var rounded = (x - residue) / 15;
+        var rounded = coord - residue + 6.5 + 1;
+        return rounded;
+    }
+
 </script>
 
 </body>
