@@ -56,6 +56,10 @@
 
     <svg id="svg1" width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg"  version="1.1" >
         <defs>
+            <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width="1200" height="620">
+                <image x="0" y="0" width="1200" height="620"
+                             xlink:href="img/HNATOB-clear.png" />
+            </pattern>
             <pattern id="gridpattern15" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="15" height="15">
                 <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="15" y2="0" stroke="#AAA"></line>
                 <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="15" stroke="#AAA"></line>
@@ -66,8 +70,8 @@
             </pattern>
         </defs>
 
-        <image x="0" y="0" width="1200" height="620"
-             xlink:href="img/HNATOB-clear.png" />
+        <!--<image x="0" y="0" width="1200" height="620" xlink:href="img/HNATOB-clear.png" />-->
+        <rect x="0" y="0" width="1200" height="620" fill="url(#img1)" />
 
         <g class="grid">
             <rect width="1000%" height="1000%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern15)"
