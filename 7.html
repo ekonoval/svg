@@ -14,6 +14,27 @@
 </head>
 <body>
 <style type="text/css">
+    div.controls {
+        text-align: center;
+    }
+
+    div.controls i {
+        margin: 3px;
+    }
+
+    div.controls p {
+
+    }
+
+    div.controls-zoom, div.controls-pan {
+        display: inline-block;
+    }
+
+    div.controls-zoom {
+        margin-left: 20px;
+    }
+
+
     #canvasBackground {
         border: 1px solid black;
         /*background: transparent url("img/HNATOB.png") no-repeat;*/
@@ -136,6 +157,7 @@
     $(function () {
 
         $("#changeBgBtn").click(function () {
+            alert("btn click");
             var currentBg = $("#canvasBackground").css('background-image');
             var newBg = '';
 
