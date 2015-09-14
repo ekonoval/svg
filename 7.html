@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>-->
+    <script type="text/javascript"
+            src="https://rawgit.com/DanielHoffmann/jquery-svg-pan-zoom/master/compiled/jquery.svg.pan.zoom.js"></script>
+</head>
+<body>
+<style type="text/css">
+    #canvasBackground {
+        border: 1px solid black;
+        /*background: transparent url("img/HNATOB.png") no-repeat;*/
+        /*background: transparent url("img/HNATOB-clear.png") no-repeat;*/
+        width: 1197px;
+        height: 618px;
+    }
+
+    #canvasGrid {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    #svgcontent {
+        position: relative;
+        top: 0;
+        left: 0;
+        background-color: red;
+    }
+</style>
+
+<div id="example1" class="controls">
+    <div class="controls-pan">
+        <p><i class="btn btn-success fa fa-arrow-up"></i></p>
+
+        <p>
+            <i class="btn btn-success fa fa-arrow-left"></i>
+            <i class="btn btn-success fa fa-arrow-right"></i>
+        </p>
+
+        <p><i class="btn btn-success fa fa-arrow-down"></i></p>
+    </div>
+    <div class="controls-zoom">
+        <p><i class="btn btn-success fa fa-refresh"></i></p>
+
+        <p><i class="btn btn-success fa fa-plus"></i></p>
+
+        <p><i class="btn btn-success fa fa-minus"></i></p>
+    </div>
+</div>
+
+<div style="background-color: #F7EFED; width: 1250px; height: 630px;">
+
+    <svg id="svg1" width="1200" height="620" viewBox="0 0 1200 620" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width="1200" height="620">
+                <image x="0" y="0" width="1200" height="620"
+                       xlink:href="img/HNATOB-clear.png"/>
+            </pattern>
+            <pattern id="gridpattern15" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="15" height="15">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="15" y2="0" stroke="#AAA"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="15" stroke="#AAA"></line>
+            </pattern>
+            <pattern id="gridpattern150" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="150" height="150">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="150" y2="0" stroke="#888"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="150" stroke="#888"></line>
+            </pattern>
+        </defs>
+
+        <!--<image x="0" y="0" width="1200" height="620" xlink:href="img/HNATOB-clear.png" />-->
+        <rect x="0" y="0" width="1200" height="620" fill="url(#img1)"/>
+
+        <g class="grid">
+            <rect width="1000%" height="1000%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern15)"
+                  opacity="1" style="pointer-events: none; display:visible;"></rect>
+            <rect width="1000%" height="1000%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern150)"
+                  opacity="1" style="pointer-events: none; display:visible;"></rect>
+        </g>
+
+        <g id="circlesHolder">
+            <!--<circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>-->
+        </g>
+
+        <circle r="50" cx="100" cy="100" style="cursor: pointer;"/>
+    </svg>
+
+</div>
+
+<button id="changeBgBtn">change background</button>
+
+<script type="text/javascript">
+    var example1, example2; //globals so we can manipulate them in the debugger
+
+    $(function () {
+//        var examples = $("svg").svgPanZoom();
+
+        var callback = function (example) {
+            return function (event) {
+                if ($(event.target).hasClass("fa-arrow-up"))
+                    example.panUp()
+                if ($(event.target).hasClass("fa-arrow-down"))
+                    example.panDown()
+                if ($(event.target).hasClass("fa-arrow-left"))
+                    example.panLeft()
+                if ($(event.target).hasClass("fa-arrow-right"))
+                    example.panRight()
+                if ($(event.target).hasClass("fa-plus"))
+                    example.zoomIn()
+                if ($(event.target).hasClass("fa-minus"))
+                    example.zoomOut()
+                if ($(event.target).hasClass("fa-refresh"))
+                    example.reset()
+            }
+        };
+
+        var svgPanZoomOptions = {
+//            controlIconsEnabled: true,
+            events: {
+                doubleClick: false
+            },
+            maxZoom: 3
+        };
+        example1 = $("#svg1").svgPanZoom(svgPanZoomOptions);
+
+        $("div#example1 i").click(callback(example1));
+//        $("div#example2 i").click(callback(example2));
+    });
+
+    $(function () {
+
+        $("#changeBgBtn").click(function () {
+            var currentBg = $("#canvasBackground").css('background-image');
+            var newBg = '';
+
+
+            if (currentBg.includes('img/HNATOB.png')) {
+                newBg = 'url("img/HNATOB-clear.png")';
+            } else {
+                newBg = 'url("img/HNATOB.png")';
+            }
+
+            $("#canvasBackground").css('background-image', newBg);
+        });
+
+        $("#svg1").click(function (evt) {
+            //alert("canvasBackground");
+
+//            var e = evt.target;
+//            var dim = e.getBoundingClientRect();
+//            var x = evt.clientX - dim.left;
+//            var y = evt.clientY - dim.top;
+            var x, y, pt;
+            pt = cursorPoint(evt);
+
+            x = pt.x;
+            y = pt.y;
+
+            console.log(x, y);
+
+            if (evt.ctrlKey) {
+                x = correctCoordForCell(x);
+                y = correctCoordForCell(y);
+            }
+
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            var myCircle = document.createElementNS(svgNS, "circle"); //to create a circle, for rectangle use rectangle
+            myCircle.setAttributeNS(null, "id", "mycircle");
+            myCircle.setAttributeNS(null, "cx", x);
+            myCircle.setAttributeNS(null, "cy", y);
+            myCircle.setAttributeNS(null, "r", 6.5);
+            myCircle.setAttributeNS(null, "fill", "black");
+            myCircle.setAttributeNS(null, "stroke", "none");
+
+//            document.getElementById("canvasBackground").appendChild(myCircle);
+            document.getElementById("circlesHolder").appendChild(myCircle);
+        });
+
+        $("circle").click(function (e) {
+            e.stopPropagation();
+            alert("crcl");
+        });
+
+
+    });
+
+    // Get point in global SVG space
+    function cursorPoint(evt) {
+        var svg = document.getElementById('svg1');
+        var pt = svg.createSVGPoint();
+        pt.x = evt.clientX;
+        pt.y = evt.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function correctCoordForCell(coord) {
+        var residue = coord % 15;
+        //var rounded = (x - residue) / 15;
+        var rounded = coord - residue + 6.5 + 1;
+        return rounded;
+    }
+
+</script>
+
+</body>
+</html>
