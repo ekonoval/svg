@@ -10,8 +10,9 @@
     <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
     <!--<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>-->
-    <script type="text/javascript"
-            src="https://rawgit.com/DanielHoffmann/jquery-svg-pan-zoom/master/compiled/jquery.svg.pan.zoom.js"></script>
+    <!--<script type="text/javascript"-->
+            <!--src="https://rawgit.com/DanielHoffmann/jquery-svg-pan-zoom/master/compiled/jquery.svg.pan.zoom.js"></script>-->
+    <script type="text/javascript" src="js/jquery.svg.pan.zoom.js"></script>
 </head>
 <body>
 <style type="text/css">
@@ -155,19 +156,6 @@
     });
 
     $(function () {
-
-//        $('.mycircle').on('click', function(){
-//            alert("fake1");
-//            //alert($(this).data('id'));
-//        });
-
-//        $(".mycircle").click(function (e) {
-//            e.stopPropagation();
-//            alert("crcl");
-//        });
-
-        //console.log($('circle.mycircle').size());
-
         //$(document.body).on("click", ".mycircle", function (e) {
         $('svg').on("click", ".mycircle", function (e) {
             console.log('circle click');
@@ -175,16 +163,23 @@
             alert("xxx");
         });
 
+        $('#svg1').on('mouseup', function (e) {
+            console.log('mouseup');
+            var p0 = $(this).data('p0'),
+                p1 = {x: e.pageX, y: e.pageY},
+                d = Math.sqrt(Math.pow(p1.x - p0.x, 2) + Math.pow(p1.y - p0.y, 2));
+
+            if (d < 4) {
+                alert('clicked');
+            }
+        }).on('mousedown', function (e) {
+            console.log('mousedown');
+            $(this).data('p0', {x: e.pageX, y: e.pageY});
+        });
+
 
         $("#svg1").click(function (evt) {
             console.log('canvas click');
-            console.log(evt);
-            //alert("canvasBackground");
-
-//            var e = evt.target;
-//            var dim = e.getBoundingClientRect();
-//            var x = evt.clientX - dim.left;
-//            var y = evt.clientY - dim.top;
             var x, y, pt;
             pt = cursorPoint(evt);
 
