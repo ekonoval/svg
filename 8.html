@@ -57,6 +57,20 @@
         left: 0;
         background-color: red;
     }
+
+    circle{
+        fill: red;
+        cursor: pointer;
+    }
+
+    circle:hover {
+        fill: yellow ;
+    }
+
+    circle+text{
+        pointer-events: none;
+        text-anchor: middle;
+    }
 </style>
 
 <div id="example1" class="controls">
@@ -110,8 +124,16 @@
         <g id="circlesHolder">
             <!--<circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>-->
         </g>
-
-        <circle class="mycircle" r="50" cx="100" cy="100" style="cursor: pointer;"/>
+<!--
+        <g>
+            <circle class="mycircle" r="50" cx="100" cy="100" style="cursor: pointer;"/>
+            <text x="60" y="125" font-family="Verdana" font-size="55" fill="blue" >54</text>
+        </g>
+ -->
+        <g transform="translate(100, 100)">
+            <circle class="mycircle" r="50" />
+            <text y="20" font-family="Verdana" font-size="55" fill="blue" >54</text>
+        </g>
     </svg>
 
 </div>
@@ -163,6 +185,7 @@
             alert("xxx");
         });
 
+        //delete
         $('#svg1').on('mouseup', function (e) {
             console.log('mouseup');
             var p0 = $(this).data('p0'),
@@ -176,9 +199,10 @@
             console.log('mousedown');
             $(this).data('p0', {x: e.pageX, y: e.pageY});
         });
-
+        //delete
 
         $("#svg1").click(function (evt) {
+            console.log($(this));
             console.log('canvas click');
             var x, y, pt;
             pt = cursorPoint(evt);
