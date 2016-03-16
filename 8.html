@@ -202,8 +202,15 @@
         //delete
 
         $("#svg1").click(function (evt) {
-            console.log($(this));
+            var dragBeenUsedOnSvg = $(this).data('dragBeenUsed');
+            //console.log('dragBeenUsed - click', $(this).data('dragBeenUsed'));
             console.log('canvas click');
+
+            if (dragBeenUsedOnSvg) {
+                evt.stopPropagation();
+                return false;
+            }
+
             var x, y, pt;
             pt = cursorPoint(evt);
 

@@ -325,13 +325,16 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
       pos = pos.matrixTransform(ctm);
       return pos;
     };
+
     return $.fn.svgPanZoom = function(options) {
       var ret;
       ret = [];
       this.each(function() {
         var $animationDiv, dragStarted, horizontalSizeIncrement, key, opts, preventClick, value, vb, verticalSizeIncrement, viewBox;
         opts = $.extend(true, {}, defaultOptions, options);
+
         opts.$svg = $(this);
+
         if (opts.animationTime == null) {
           opts.animationTime = 0;
         }
@@ -546,6 +549,7 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
           this.setViewBox(oldViewBox.x, oldViewBox.y, oldViewBox.width, oldViewBox.height, 0);
           this.setViewBox(newViewBox.x, newViewBox.y, newViewBox.width, newViewBox.height);
         }).bind(opts));
+
         opts.$svg.dblclick((function(ev) {
           if (opts.events.doubleClick !== true) {
             return;
@@ -562,10 +566,14 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
             return ev.preventDefault();
           }
         }, true);
+
         dragStarted = false;
         preventClick = false;
+
         opts.$svg.on("mousedown touchstart", (function(ev) {
           var $body, domBody, initialViewBox, mouseMoveCallback, mouseUpCallback, oldCursor;
+          var dragBeenUsed = false;
+
           if (dragStarted) {
             return;
           }
@@ -583,7 +591,9 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
           if (this.events.dragCursor != null) {
             $body.css("cursor", this.events.dragCursor);
           }
+
           mouseMoveCallback = (function(ev2) {
+            dragBeenUsed = true;
             var currentMousePosition, initialMousePosition;
             ev2.preventDefault();
             ev2.stopPropagation();
@@ -594,7 +604,10 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
             }
             this.setViewBox(initialViewBox.x + initialMousePosition.x - currentMousePosition.x, initialViewBox.y + initialMousePosition.y - currentMousePosition.y, null, null, 0);
           }).bind(opts);
+
           mouseUpCallback = (function(ev2) {
+            opts.$svg.data('dragBeenUsed', dragBeenUsed);
+
             if (ev2.type === "mouseout" && ev2.target !== ev2.currentTarget) {
               return;
             }
@@ -609,6 +622,7 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
             if (this.events.dragCursor != null) {
               $body.css("cursor", oldCursor);
             }
+
             dragStarted = false;
           }).bind(opts);
           domBody.addEventListener("mousemove", mouseMoveCallback, true);
@@ -621,6 +635,7 @@ Copyright (C) 2014 Daniel Hoffmann Bernardes, Ícaro Technologies
         opts.setViewBox(vb.x, vb.y, vb.width, vb.height, 0);
         ret.push(opts);
       });
+
       if (ret.length === 0) {
         return null;
       }
