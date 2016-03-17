@@ -12,7 +12,8 @@
     <!--<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>-->
     <!--<script type="text/javascript"-->
             <!--src="https://rawgit.com/DanielHoffmann/jquery-svg-pan-zoom/master/compiled/jquery.svg.pan.zoom.js"></script>-->
-    <script type="text/javascript" src="js/jquery.svg.pan.zoom.js"></script>
+    <!--<script type="text/javascript" src="js/jquery.svg.pan.zoom.js"></script>-->
+    <script type="text/javascript" src="js/jquery.svg.pan.zoom-clear.js"></script>
 </head>
 <body>
 <style type="text/css">
@@ -63,13 +64,31 @@
         cursor: pointer;
     }
 
-    circle:hover {
+    circle:hover{
         fill: yellow ;
+    }
+
+    /* http://stackoverflow.com/a/6910112/1101589 */
+    circle:hover + text{
+        fill: red;
     }
 
     circle+text{
         pointer-events: none;
         text-anchor: middle;
+    }
+
+    .mycircle{
+        fill: blue;
+    }
+    .mycircle+text{
+        font-size: 8px;
+        font-family:Verdana;
+        fill: whitesmoke;
+    }
+
+    .big-circle+text{
+        font-size: 55px;
     }
 </style>
 
@@ -123,6 +142,13 @@
 
         <g id="circlesHolder">
             <!--<circle id="circle1" r="6.5" cx="200" cy="200" style="cursor: pointer;"></circle>-->
+            <circle class="mycircle" data-id="0.8850135960667452" cx="412.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.3985337499862185" cx="427.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.274575257874788" cx="442.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.0048047438776680496" cx="457.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7389942391491436" cx="472.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.557602019405903" cx="487.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.6385192571831404" cx="502.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.29481209054306967" cx="517.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.5066230109946385" cx="532.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.6415727687044555" cx="547.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.09455237932382898" cx="562.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.06728660068176107" cx="577.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.05199003082832798" cx="592.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7735657459532144" cx="607.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.38407143163930313" cx="622.5" cy="40" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.46275184882856524" cx="637.5" cy="40" r="6.5" fill="black" stroke="none"/>
+
+            <circle class="mycircle" data-id="0.8850135960667452" cx="412.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.3985337499862185" cx="427.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.274575257874788" cx="442.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.0048047438776680496" cx="457.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7389942391491436" cx="472.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.557602019405903" cx="487.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.6385192571831404" cx="502.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.29481209054306967" cx="517.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.5066230109946385" cx="532.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.6415727687044555" cx="547.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.09455237932382898" cx="562.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.06728660068176107" cx="577.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.05199003082832798" cx="592.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7735657459532144" cx="607.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.38407143163930313" cx="622.5" cy="412.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.46275184882856524" cx="637.5" cy="412.5" r="6.5" fill="black" stroke="none"/>
+            <circle class="mycircle" data-id="0.4848556651052295" cx="637.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.9499337322011613" cx="622.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.43578049981979183" cx="607.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.051463484513679325" cx="592.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.01624153574369347" cx="577.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.8780133738571603" cx="562.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.15945004925231598" cx="547.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.8890104091379517" cx="532.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.32299482234085386" cx="517.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.22724534262461438" cx="502.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.8685375230675959" cx="487.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.4876197144241987" cx="472.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.26290876989801115" cx="457.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.11303004870528788" cx="442.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.9432721133446761" cx="427.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.6245825663407722" cx="412.5" cy="427.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.5173344818655201" cx="397.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.3445996290924601" cx="412.5" cy="442.5" r="6.5" fill="black" stroke="none"/>
+            <circle class="mycircle" data-id="0.596783091305575" cx="427.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7617574660667091" cx="442.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7548203176041656" cx="457.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.21135047380569738" cx="472.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.6390776152191148" cx="487.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.7338962007654813" cx="502.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.2071666710425657" cx="517.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.35649535915336206" cx="532.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.9471503954424432" cx="547.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.27857678849378165" cx="562.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.1283857622017731" cx="577.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.5925574228180986" cx="592.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.944234535903575" cx="607.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.9268170619114929" cx="622.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.46740772931250807" cx="637.5" cy="442.5" r="6.5" fill="black" stroke="none"/><circle class="mycircle" data-id="0.3501431978143409" cx="652.5" cy="442.5" r="6.5" fill="black" stroke="none"/>
+
+
         </g>
 <!--
         <g>
@@ -131,8 +157,13 @@
         </g>
  -->
         <g transform="translate(100, 100)">
-            <circle class="mycircle" r="50" />
+            <circle class="mycircle big-circle" r="50" />
             <text y="20" font-family="Verdana" font-size="55" fill="blue" >54</text>
+        </g>
+
+        <g transform="translate(200, 100)">
+            <circle class="mycircle" r="6.5" />
+            <text y="3"  >54</text>
         </g>
     </svg>
 
@@ -169,6 +200,7 @@
 //            controlIconsEnabled: true,
             events: {
                 doubleClick: false
+                //,drag: false
             },
             maxZoom: 3
         };
@@ -182,24 +214,24 @@
         $('svg').on("click", ".mycircle", function (e) {
             console.log('circle click');
             e.stopPropagation();
-            alert("xxx");
+            alert($(this).data('id'));
         });
 
-        //delete
-        $('#svg1').on('mouseup', function (e) {
-            console.log('mouseup');
-            var p0 = $(this).data('p0'),
-                p1 = {x: e.pageX, y: e.pageY},
-                d = Math.sqrt(Math.pow(p1.x - p0.x, 2) + Math.pow(p1.y - p0.y, 2));
-
-            if (d < 4) {
-                alert('clicked');
-            }
-        }).on('mousedown', function (e) {
-            console.log('mousedown');
-            $(this).data('p0', {x: e.pageX, y: e.pageY});
-        });
-        //delete
+//        //delete
+//        $('#svg1').on('mouseup', function (e) {
+//            console.log('mouseup');
+//            var p0 = $(this).data('p0'),
+//                p1 = {x: e.pageX, y: e.pageY},
+//                d = Math.sqrt(Math.pow(p1.x - p0.x, 2) + Math.pow(p1.y - p0.y, 2));
+//
+//            if (d < 4) {
+//                alert('clicked');
+//            }
+//        }).on('mousedown', function (e) {
+//            console.log('mousedown');
+//            $(this).data('p0', {x: e.pageX, y: e.pageY});
+//        });
+//        //delete
 
         $("#svg1").click(function (evt) {
             var dragBeenUsedOnSvg = $(this).data('dragBeenUsed');
@@ -207,8 +239,8 @@
             console.log('canvas click');
 
             if (dragBeenUsedOnSvg) {
-                evt.stopPropagation();
-                return false;
+                //evt.stopPropagation();
+                //return false;
             }
 
             var x, y, pt;
