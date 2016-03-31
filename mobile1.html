@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">-->
+    <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1">
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script src="../dist/svg-pan-zoom.js"></script>
+    <script src="../demo/hammer.js"></script>
+
+    <style type="text/css">
+        .mycircle {
+            fill: grey;
+            cursor:pointer;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function cursorPoint(evt) {
+            var svg = document.getElementById('mobile-svg');
+            var pt = svg.createSVGPoint();
+            pt.x = evt.clientX;
+            pt.y = evt.clientY;
+            return pt.matrixTransform(svg.getScreenCTM().inverse());
+        }
+
+        function createCell(evt)
+        {
+            var sizes = panZoom.getSizes();
+            var pan = panZoom.getPan();
+            var zoom = panZoom.getZoom();
+            console.log(sizes);
+            console.log(pan);
+            console.log('zoom ', zoom);
+
+            var x, y, pt;
+            pt = cursorPoint(evt);
+
+            x = pt.x;
+            y = pt.y;
+
+            console.log(x, y);
+
+            if (evt.ctrlKey) {
+//                x = correctCoordForCell(x);
+//                y = correctCoordForCell(y);
+            }
+
+            if (zoom == 1) {
+                x -= pan.x;
+                y -= pan.y;
+            } else {
+                //x = x/zoom - pan.x;
+                x = (x - pan.x) / zoom;
+                y = (y - pan.y)/zoom;
+            }
+
+
+
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            var myCircle = document.createElementNS(svgNS, "circle"); //to create a circle, for rectangle use rectangle
+            myCircle.setAttributeNS(null, "class", "mycircle");
+            myCircle.setAttributeNS(null, "data-id", Math.random().toString());
+            myCircle.setAttributeNS(null, "cx", x);
+            myCircle.setAttributeNS(null, "cy", y);
+            //myCircle.setAttributeNS(null, "r", 6.5);
+            myCircle.setAttributeNS(null, "r", 5);
+            myCircle.setAttributeNS(null, "fill", "black");
+            myCircle.setAttributeNS(null, "stroke", "none");
+
+//            document.getElementById("canvasBackground").appendChild(myCircle);
+            document.getElementById("circlesHolder").appendChild(myCircle);
+        }
+
+        $(function () {
+            var svgDragBeenUsed = false;
+
+            $('svg').on("click", ".mycircle", function (e) {
+                if (!svgDragBeenUsed) {
+                    console.log('circle click');
+                    e.stopPropagation();
+                    alert($(this).data('id'));
+                }
+            });
+
+            $("#mobile-svg").click(function (evt) {
+//                alert("svg click");
+                if (!svgDragBeenUsed) {
+                    console.log('click');
+                    //alert("svg click");
+
+                    createCell(evt);
+
+                }
+
+                svgDragBeenUsed = false;
+            });
+
+            var eventsHandler;
+
+            eventsHandler = {
+                haltEventListeners: ['touchstart', 'touchend', 'touchmove', 'touchleave', 'touchcancel', 'press']
+                , init: function (options) {
+                    var instance = options.instance
+                        , initialScale = 1
+                        , pannedX = 0
+                        , pannedY = 0;
+
+                    // Init Hammer
+                    // Listen only for pointer and touch events
+                    this.hammer = Hammer(options.svgElement, {
+                        inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput
+                    });
+
+                    // Enable pinch
+                    this.hammer.get('pinch').set({enable: true});
+
+                    // Handle double tap
+                    this.hammer.on('doubletap', function (ev) {
+                        instance.zoomIn()
+                    });
+
+                    this.hammer.on('press', function (ev) {
+                        console.log(ev);
+                    });
+
+                    // Handle pan
+                    this.hammer.on('panstart panmove', function (ev) {
+                        // On pan start reset panned variables
+                        if (ev.type === 'panstart') {
+                            pannedX = 0;
+                            pannedY = 0
+                        }
+
+                        // Pan only the difference
+                        instance.panBy({x: ev.deltaX - pannedX, y: ev.deltaY - pannedY});
+                        pannedX = ev.deltaX;
+                        pannedY = ev.deltaY
+                    });
+
+                    // Handle pinch
+                    this.hammer.on('pinchstart pinchmove', function (ev) {
+                        // On pinch start remember initial zoom
+                        if (ev.type === 'pinchstart') {
+                            initialScale = instance.getZoom();
+                            instance.zoom(initialScale * ev.scale)
+                        }
+
+                        instance.zoom(initialScale * ev.scale)
+
+                    });
+
+                    // Prevent moving the page on some devices when panning over SVG
+                    options.svgElement.addEventListener('touchmove', function (e) {
+                        e.preventDefault();
+                    });
+                }
+
+                , destroy: function () {
+                    this.hammer.destroy()
+                }
+            };
+
+            // Expose to window namespace for testing purposes
+            window.panZoom = svgPanZoom('#mobile-svg', {
+                zoomEnabled: true
+                , controlIconsEnabled: true
+                , fit: 1
+                , center: 1
+                , zoomScaleSensitivity: 0.3
+                , dblClickZoomEnabled: false
+                , customEventsHandler: eventsHandler
+                , onZoom: function(){
+                    svgDragBeenUsed = false;
+                }
+                , beforePan: function (oldPan, newPan) {
+                    console.log('before pan');
+
+                    var xDiff = Math.abs(oldPan.x - newPan.x);
+                    var yDiff = Math.abs(oldPan.y - newPan.y);
+                    var MAX_DIFF = 3;
+
+                    //console.log(xDiff, yDiff);
+
+                    if (xDiff > MAX_DIFF || yDiff > MAX_DIFF) {
+                        svgDragBeenUsed = true;
+                        console.log('new pan');
+                        return newPan;
+                    } else {
+//                        console.log('old pan');
+                        return oldPan;
+                    }
+
+//                    console.log(oldPan, newPan);
+//                    var stopHorizontal = false
+//                        , stopVertical = false
+//                        , gutterWidth = 100
+//                        , gutterHeight = 100
+//                    // Computed variables
+//                        , sizes = this.getSizes()
+//                        , leftLimit = -((sizes.viewBox.x + sizes.viewBox.width) * sizes.realZoom) + gutterWidth
+//                        , rightLimit = sizes.width - gutterWidth - (sizes.viewBox.x * sizes.realZoom)
+//                        , topLimit = -((sizes.viewBox.y + sizes.viewBox.height) * sizes.realZoom) + gutterHeight
+//                        , bottomLimit = sizes.height - gutterHeight - (sizes.viewBox.y * sizes.realZoom)
+//
+//                    customPan = {}
+//                    customPan.x = Math.max(leftLimit, Math.min(rightLimit, newPan.x))
+//                    customPan.y = Math.max(topLimit, Math.min(bottomLimit, newPan.y))
+
+//                    return customPan
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="mobile-div" style="width: 602px; height: 420px; border:1px solid black; ">
+    <svg id="mobile-svg" xmlns="http://www.w3.org/2000/svg"
+         style="display: inline; width: inherit; min-width: inherit; max-width: inherit; height: inherit; min-height: inherit; max-height: inherit;"
+         version="1.1">
+        <defs>
+            <linearGradient id="linear-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:rgb(56,121,217);stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:rgb(138,192,7);stop-opacity:1"/>
+            </linearGradient>
+
+            <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width="1200" height="620">
+                <image x="0" y="0" width="1200" height="620"
+                       xlink:href="http://bilet.dev/svg/img/oct.png"/>
+            </pattern>
+
+            <pattern id="gridpattern15" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="15" height="15">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="15" y2="0" stroke="#AAA"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="15" stroke="#AAA"></line>
+            </pattern>
+            <pattern id="gridpattern150" patternUnits="userSpaceOnUse" x="-0.1" y="-0.1" width="150" height="150">
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="150" y2="0" stroke="#888"></line>
+                <line fill="none" stroke-width="0.2" x1="0" y1="0" x2="0" y2="150" stroke="#888"></line>
+            </pattern>
+        </defs>
+
+
+
+        <g fill="none">
+            <rect x="0" y="0" width="240" height="240" fill="url(#img1)"/>
+            <!--
+            <g stroke="#000" fill="#FFF">
+                <rect x="5" y="5" width="240" height="240" fill="url(#linear-gradient)"/>
+                <path d="M 5 5  L 245 245 Z"/>
+            </g>
+ -->
+            <g class="grid">
+                <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern15)"
+                      opacity="1" style="pointer-events: none; display:visible;"></rect>
+                <rect width="100%" height="100%" x="0" y="0" stroke-width="0" stroke="none" fill="url(#gridpattern150)"
+                      opacity="1" style="pointer-events: none; display:visible;"></rect>
+            </g>
+
+            <g id="circlesHolder">
+                <g transform="translate(100, 100)">
+                    <circle class="mycircle big-circle" r="50" fill="red"/>
+                    <text>54</text>
+                </g>
+
+                <circle class="mycircle" data-id="0.2800638565963478" cx="305" cy="155" r="5" fill="black" stroke="none"/>
+            </g>
+
+
+        </g>
+    </svg>
+</div>
+
+
+
+</body>
+
+</html>
