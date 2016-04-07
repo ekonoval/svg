@@ -1,0 +1,48 @@
+circle{
+    fill: red;
+    cursor: pointer;
+}
+
+circle:hover{
+    fill: yellow ;
+}
+
+/* http://stackoverflow.com/a/6910112/1101589 */
+circle:hover + text{
+    fill: red;
+    display: block !important;
+}
+
+
+circle+text{
+    pointer-events: none;
+    text-anchor: middle;
+    /*display: none;*/
+}
+
+circle.big-circle+text{
+    display: block;
+}
+
+svg.desktop circle+text{
+    display: none;
+}
+
+.mycircle{
+    fill: blue;
+}
+.mycircle+text{
+    font-size: 8px;
+    font-family:Verdana;
+    fill: whitesmoke;
+    transform: translate(0, 3px);
+    /*display: none;*/
+}
+
+.big-circle{
+    fill: #dbcbff;
+}
+.big-circle+text{
+    font-size: 55px;
+    transform: translate(0, 20px);
+}
